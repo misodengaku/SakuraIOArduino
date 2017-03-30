@@ -6,18 +6,18 @@
 class SakuraIO
 {
 protected:
-  virtual void begin(){}
-  virtual void end(){}
+  virtual void begin() {}
+  virtual void end() {}
 
-  virtual void sendByte(uint8_t data){}
+  virtual void sendByte(uint8_t data) {}
   //virtual void finishSending(){}
 
-  virtual uint8_t startReceive(uint8_t length){return length;};
-  virtual uint8_t receiveByte(){return 0x00;}
-  virtual uint8_t receiveByte(bool stop){return 0x00;}
+  virtual uint8_t startReceive(uint8_t length) { return length; };
+  virtual uint8_t receiveByte() { return 0x00; }
+  virtual uint8_t receiveByte(bool stop) { return 0x00; }
   //virtual void finishReceiving(){}
 
-  uint8_t executeCommand(uint8_t cmd,uint8_t requestLength, uint8_t *request, uint8_t *responseLength, uint8_t *response);
+  uint8_t executeCommand(uint8_t cmd, uint8_t requestLength, uint8_t *request, uint8_t *responseLength, uint8_t *response);
 
   uint8_t enqueueTxRaw(uint8_t ch, uint8_t type, uint8_t length, uint8_t *data, uint64_t offset);
 
@@ -53,6 +53,11 @@ public:
   uint16_t getProductID();
   uint8_t getUniqueID(char *data);
   uint8_t getFirmwareVersion(char *data);
+  uint8_t startFileDownload(uint16_t fileID);
+  uint8_t cancelFileDownload();
+  uint8_t getFileData(uint8_t *buf, uint8_t bufSize, uint8_t *len);
+  uint8_t getFileMetaData(uint8_t *status, uint32_t *size, uint64_t *timestamp, uint32_t *crc32);
+  uint8_t getFileDownloadStatus(uint8_t *status, uint32_t *received_size);
   uint8_t unlock();
   uint8_t updateFirmware();
   uint8_t getFirmwareUpdateStatus();
@@ -68,6 +73,7 @@ protected:
   void sendByte(uint8_t data);
   uint8_t receiveByte(bool stop);
   uint8_t receiveByte();
+
 public:
   SakuraIO_SPI(int _cs);
 };
@@ -82,6 +88,7 @@ protected:
   uint8_t receiveByte(bool stop);
   uint8_t receiveByte();
   uint8_t mode;
+
 public:
   SakuraIO_I2C();
 };
